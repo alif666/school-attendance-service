@@ -20,6 +20,11 @@ public class Branch
     {
         BranchName = ValidateBranchName(branchName);
     }
+    public void UpdateBranchProfile(string branchName, string? address)
+    {
+        BranchName = ValidateBranchName(branchName);
+        Address = address;
+    }
     public void Deactivate()
     {
         IsActive = false;

@@ -43,6 +43,21 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
             );
             return true;
         }
+        if (exception is DuplicateBranchCodeException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+
+            await httpContext.Response.WriteAsJsonAsync(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Branch code already exists.",
+                    Detail = exception.Message
+                },
+                cancellationToken
+            );
+            return true;
+        }
         return false;
     }
 }
