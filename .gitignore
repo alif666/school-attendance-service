@@ -1,0 +1,26 @@
+# Build output
+**/bin/
+**/obj/
+
+# Visual Studio and VS Code local files
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Test output
+TestResults/
+
+# Signing and local certificates
+*.pfx
+
+# Environment and local session files
+.env
+CODEX_SESSION
+
+# Local development configuration and secrets
+SchoolAttendance.Api/appsettings.Development.json
+
+# OS-generated files
+.DS_Store
+Thumbs.db

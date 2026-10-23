@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: school-attendance-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: attendance
+      POSTGRES_USER: attendance_app
+      POSTGRES_PASSWORD: attendance_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - attendance-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U attendance_app -d attendance"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  attendance-postgres-data:

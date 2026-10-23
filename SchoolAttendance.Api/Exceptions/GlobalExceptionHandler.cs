@@ -1,0 +1,48 @@
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using SchoolAttendance.Application.Schools;
+using SchoolAttendance.Application.Students;
+
+namespace SchoolAttendance.Api.Exceptions;
+
+public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
+{
+    public async ValueTask<bool> TryHandleAsync(
+        HttpContext httpContext,
+        Exception exception,
+        CancellationToken cancellationToken)
+    {
+        logger.LogError(exception, "An exception occurred.");
+        if (exception is DuplicateStudentCodeException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+
+            await httpContext.Response.WriteAsJsonAsync(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Student code already exists.",
+                    Detail = exception.Message
+                },
+                cancellationToken
+            );
+            return true;
+        }
+        if (exception is DuplicateSchoolCodeException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+
+            await httpContext.Response.WriteAsJsonAsync(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "School code already exists.",
+                    Detail = exception.Message
+                },
+                cancellationToken
+            );
+            return true;
+        }
+        return false;
+    }
+}
