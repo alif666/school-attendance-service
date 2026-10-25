@@ -20,6 +20,18 @@
     {
       "key": "branchId",
       "value": ""
+    },
+    {
+      "key": "academicSessionId",
+      "value": ""
+    },
+    {
+      "key": "schoolClassId",
+      "value": ""
+    },
+    {
+      "key": "sectionId",
+      "value": ""
     }
   ],
   "item": [
@@ -318,6 +330,300 @@
           "raw": "{{baseUrl}}/api/branches/{{branchId}}",
           "host": ["{{baseUrl}}"],
           "path": ["api", "branches", "{{branchId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create Academic Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"branchId\": \"{{branchId}}\",\n  \"name\": \"2026\",\n  \"startDate\": \"2026-01-01\",\n  \"endDate\": \"2026-12-31\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/academic-sessions",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "academic-sessions"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const body = pm.response.json();",
+              "  pm.collectionVariables.set('academicSessionId', body.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Academic Sessions By Branch",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/academic-sessions?branchId={{branchId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "academic-sessions"],
+          "query": [
+            {
+              "key": "branchId",
+              "value": "{{branchId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Academic Session By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/academic-sessions/{{academicSessionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "academic-sessions", "{{academicSessionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update Academic Session",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"2026 Updated\",\n  \"startDate\": \"2026-01-01\",\n  \"endDate\": \"2026-12-31\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/academic-sessions/{{academicSessionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "academic-sessions", "{{academicSessionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Academic Session",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/academic-sessions/{{academicSessionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "academic-sessions", "{{academicSessionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create School Class",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"branchId\": \"{{branchId}}\",\n  \"name\": \"Class 5\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/school-classes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "school-classes"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const body = pm.response.json();",
+              "  pm.collectionVariables.set('schoolClassId', body.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get School Classes By Branch",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/school-classes?branchId={{branchId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "school-classes"],
+          "query": [
+            {
+              "key": "branchId",
+              "value": "{{branchId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get School Class By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/school-classes/{{schoolClassId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "school-classes", "{{schoolClassId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update School Class",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Class 5 Updated\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/school-classes/{{schoolClassId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "school-classes", "{{schoolClassId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete School Class",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/school-classes/{{schoolClassId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "school-classes", "{{schoolClassId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create Section",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"schoolClassId\": \"{{schoolClassId}}\",\n  \"name\": \"A\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/sections",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "sections"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const body = pm.response.json();",
+              "  pm.collectionVariables.set('sectionId', body.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Sections By School Class",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/sections?schoolClassId={{schoolClassId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "sections"],
+          "query": [
+            {
+              "key": "schoolClassId",
+              "value": "{{schoolClassId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Section By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/sections/{{sectionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "sections", "{{sectionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update Section",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"A Updated\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/sections/{{sectionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "sections", "{{sectionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Section",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/sections/{{sectionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "sections", "{{sectionId}}"]
         }
       }
     }

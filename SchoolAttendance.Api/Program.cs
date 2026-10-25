@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAttendance.Api.Exceptions;
+using SchoolAttendance.Application.AcademicSessions;
+using SchoolAttendance.Application.SchoolClasses;
 using SchoolAttendance.Application.Schools;
+using SchoolAttendance.Application.Sections;
 using SchoolAttendance.Application.Students;
 using SchoolAttendance.Application.Welcome;
 using SchoolAttendance.Infrastructure.Persistence;
@@ -21,6 +24,12 @@ builder.Services.AddScoped<ISchoolService, SchoolService>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IBranchService, BranchService>();
+builder.Services.AddScoped<IAcademicSessionRepository, AcademicSessionRepository>();
+builder.Services.AddScoped<IAcademicSessionService, AcademicSessionService>();
+builder.Services.AddScoped<ISchoolClassRepository, SchoolClassRepository>();
+builder.Services.AddScoped<ISchoolClassService, SchoolClassService>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<ISectionService, SectionService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
