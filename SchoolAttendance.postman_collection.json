@@ -32,6 +32,10 @@
     {
       "key": "sectionId",
       "value": ""
+    },
+    {
+      "key": "enrollmentId",
+      "value": ""
     }
   ],
   "item": [
@@ -624,6 +628,130 @@
           "raw": "{{baseUrl}}/api/sections/{{sectionId}}",
           "host": ["{{baseUrl}}"],
           "path": ["api", "sections", "{{sectionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create Enrollment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentId\": \"{{studentId}}\",\n  \"academicSessionId\": \"{{academicSessionId}}\",\n  \"sectionId\": \"{{sectionId}}\",\n  \"enrollmentDate\": \"2026-01-01\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "enrollments"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const body = pm.response.json();",
+              "  pm.collectionVariables.set('enrollmentId', body.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Enrollments By Section",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments/sections?sectionId={{sectionId}}&academicSessionId={{academicSessionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "enrollments", "sections"],
+          "query": [
+            {
+              "key": "sectionId",
+              "value": "{{sectionId}}"
+            },
+            {
+              "key": "academicSessionId",
+              "value": "{{academicSessionId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Enrollment By Student",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments/students?studentId={{studentId}}&academicSessionId={{academicSessionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "enrollments", "students"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "{{studentId}}"
+            },
+            {
+              "key": "academicSessionId",
+              "value": "{{academicSessionId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Enrollment By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments/{{enrollmentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "enrollments", "{{enrollmentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update Enrollment Section",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sectionId\": \"{{sectionId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments/{{enrollmentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "enrollments", "{{enrollmentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Enrollment",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/enrollments/{{enrollmentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "enrollments", "{{enrollmentId}}"]
         }
       }
     }

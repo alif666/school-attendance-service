@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAttendance.Application.AcademicSessions;
+using SchoolAttendance.Application.Enrollments;
 using SchoolAttendance.Application.SchoolClasses;
 using SchoolAttendance.Application.Schools;
 using SchoolAttendance.Application.Sections;
@@ -100,6 +101,21 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
                 {
                     Status = StatusCodes.Status409Conflict,
                     Title = "Section in school class already exists.",
+                    Detail = exception.Message
+                },
+                cancellationToken
+            );
+            return true;
+        }
+        if (exception is DuplicateEnrollmentException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+
+            await httpContext.Response.WriteAsJsonAsync(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Enrollment in academic session already exists.",
                     Detail = exception.Message
                 },
                 cancellationToken

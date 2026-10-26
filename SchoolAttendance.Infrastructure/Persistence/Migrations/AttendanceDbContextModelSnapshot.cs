@@ -52,6 +52,40 @@ namespace SchoolAttendance.Infrastructure.Persistence.Migrations
                     b.ToTable("AcademicSessions");
                 });
 
+            modelBuilder.Entity("SchoolAttendance.Domain.Enrollments.Enrollment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AcademicSessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateOnly>("EnrollmentDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcademicSessionId");
+
+                    b.HasIndex("SectionId");
+
+                    b.HasIndex("StudentId", "AcademicSessionId")
+                        .IsUnique()
+                        .HasFilter("\"IsActive\"=TRUE");
+
+                    b.ToTable("Enrollments");
+                });
+
             modelBuilder.Entity("SchoolAttendance.Domain.SchoolClasses.SchoolClass", b =>
                 {
                     b.Property<Guid>("Id")
@@ -189,6 +223,27 @@ namespace SchoolAttendance.Infrastructure.Persistence.Migrations
                     b.HasOne("SchoolAttendance.Domain.Schools.Branch", null)
                         .WithMany()
                         .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolAttendance.Domain.Enrollments.Enrollment", b =>
+                {
+                    b.HasOne("SchoolAttendance.Domain.AcademicSessions.AcademicSession", null)
+                        .WithMany()
+                        .HasForeignKey("AcademicSessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SchoolAttendance.Domain.Sections.Section", null)
+                        .WithMany()
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SchoolAttendance.Domain.Students.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

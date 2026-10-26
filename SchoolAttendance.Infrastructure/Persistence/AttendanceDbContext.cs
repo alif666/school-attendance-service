@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAttendance.Domain.AcademicSessions;
+using SchoolAttendance.Domain.Enrollments;
 using SchoolAttendance.Domain.SchoolClasses;
 using SchoolAttendance.Domain.Schools;
 using SchoolAttendance.Domain.Sections;
@@ -19,6 +20,7 @@ public class AttendanceDbContext : DbContext
     public DbSet<AcademicSession> AcademicSessions => Set<AcademicSession>();
     public DbSet<SchoolClass> SchoolClasses => Set<SchoolClass>();
     public DbSet<Section> Sections => Set<Section>();
+    public DbSet<Enrollment> Enrollments => Set<Enrollment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -37,17 +39,25 @@ public class AttendanceDbContext : DbContext
             session.BranchId,
             session.Name
         }).IsUnique();
-        modelBuilder.Entity<SchoolClass>().HasOne<Branch>().WithMany().HasForeignKey(session => session.BranchId).OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<SchoolClass>().HasIndex(session => new
+        modelBuilder.Entity<SchoolClass>().HasOne<Branch>().WithMany().HasForeignKey(schoolClass => schoolClass.BranchId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SchoolClass>().HasIndex(schoolClass => new
         {
-            session.BranchId,
-            session.Name
+            schoolClass.BranchId,
+            schoolClass.Name
         }).IsUnique();
-        modelBuilder.Entity<Section>().HasOne<SchoolClass>().WithMany().HasForeignKey(session => session.SchoolClassId).OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<Section>().HasIndex(session => new
+        modelBuilder.Entity<Section>().HasOne<SchoolClass>().WithMany().HasForeignKey(section => section.SchoolClassId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Section>().HasIndex(section => new
         {
-            session.SchoolClassId,
-            session.Name
+            section.SchoolClassId,
+            section.Name
         }).IsUnique();
+        modelBuilder.Entity<Enrollment>().HasOne<Student>().WithMany().HasForeignKey(enrollment => enrollment.StudentId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Enrollment>().HasOne<AcademicSession>().WithMany().HasForeignKey(enrollment => enrollment.AcademicSessionId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Enrollment>().HasOne<Section>().WithMany().HasForeignKey(enrollment => enrollment.SectionId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Enrollment>().HasIndex(enrollment => new
+        {
+            enrollment.StudentId,
+            enrollment.AcademicSessionId,
+        }).IsUnique().HasFilter("\"IsActive\"=TRUE");
     }
 }
