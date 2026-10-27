@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAttendance.Application.AcademicSessions;
+using SchoolAttendance.Application.Attendances;
 using SchoolAttendance.Application.Enrollments;
 using SchoolAttendance.Application.SchoolClasses;
 using SchoolAttendance.Application.Schools;
@@ -116,6 +117,36 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
                 {
                     Status = StatusCodes.Status409Conflict,
                     Title = "Enrollment in academic session already exists.",
+                    Detail = exception.Message
+                },
+                cancellationToken
+            );
+            return true;
+        }
+        if (exception is EnrollmentNotFoundException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+
+            await httpContext.Response.WriteAsJsonAsync(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Enrollment not found.",
+                    Detail = exception.Message
+                },
+                cancellationToken
+            );
+            return true;
+        }
+        if (exception is DuplicateAttendanceRecordException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+
+            await httpContext.Response.WriteAsJsonAsync(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Attendance record for enrollment id, attendance date and event type already exists.",
                     Detail = exception.Message
                 },
                 cancellationToken

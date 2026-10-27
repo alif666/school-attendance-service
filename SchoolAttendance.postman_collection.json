@@ -36,6 +36,10 @@
     {
       "key": "enrollmentId",
       "value": ""
+    },
+    {
+      "key": "attendanceRecordId",
+      "value": ""
     }
   ],
   "item": [
@@ -752,6 +756,130 @@
           "raw": "{{baseUrl}}/api/enrollments/{{enrollmentId}}",
           "host": ["{{baseUrl}}"],
           "path": ["api", "enrollments", "{{enrollmentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create Attendance Record",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"enrollmentId\": \"{{enrollmentId}}\",\n  \"attendanceDate\": \"2026-01-01\",\n  \"eventType\": 0,\n  \"status\": 0\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/attendance-records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "attendance-records"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const body = pm.response.json();",
+              "  pm.collectionVariables.set('attendanceRecordId', body.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Attendance By Section And Date Range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/attendance-records/sections?sectionId={{sectionId}}&academicSessionId={{academicSessionId}}&fromDate=2026-01-01&toDate=2026-12-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "attendance-records", "sections"],
+          "query": [
+            {
+              "key": "sectionId",
+              "value": "{{sectionId}}"
+            },
+            {
+              "key": "academicSessionId",
+              "value": "{{academicSessionId}}"
+            },
+            {
+              "key": "fromDate",
+              "value": "2026-01-01"
+            },
+            {
+              "key": "toDate",
+              "value": "2026-12-31"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Attendance By Enrollment And Event",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/attendance-records/enrollments?enrollmentId={{enrollmentId}}&attendanceDate=2026-01-01&eventType=0",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "attendance-records", "enrollments"],
+          "query": [
+            {
+              "key": "enrollmentId",
+              "value": "{{enrollmentId}}"
+            },
+            {
+              "key": "attendanceDate",
+              "value": "2026-01-01"
+            },
+            {
+              "key": "eventType",
+              "value": "0"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Attendance Record By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/attendance-records/{{attendanceRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "attendance-records", "{{attendanceRecordId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update Attendance Status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": 2\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/attendance-records/{{attendanceRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "attendance-records", "{{attendanceRecordId}}"]
         }
       }
     }

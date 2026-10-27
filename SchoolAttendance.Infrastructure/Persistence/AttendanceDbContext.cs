@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAttendance.Domain.AcademicSessions;
+using SchoolAttendance.Domain.Attendances;
 using SchoolAttendance.Domain.Enrollments;
 using SchoolAttendance.Domain.SchoolClasses;
 using SchoolAttendance.Domain.Schools;
@@ -21,7 +22,7 @@ public class AttendanceDbContext : DbContext
     public DbSet<SchoolClass> SchoolClasses => Set<SchoolClass>();
     public DbSet<Section> Sections => Set<Section>();
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
-
+    public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Student>().HasIndex(student => student.StudentCode).IsUnique();
@@ -59,5 +60,14 @@ public class AttendanceDbContext : DbContext
             enrollment.StudentId,
             enrollment.AcademicSessionId,
         }).IsUnique().HasFilter("\"IsActive\"=TRUE");
+        modelBuilder.Entity<AttendanceRecord>().HasOne<Enrollment>().WithMany().HasForeignKey(attendanceRecord=>attendanceRecord.EnrollmentId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<AttendanceRecord>().HasIndex(attendanceRecord=> new
+        {
+            attendanceRecord.EnrollmentId,
+            attendanceRecord.AttendanceDate,
+            attendanceRecord.EventType
+        }).IsUnique();
+        modelBuilder.Entity<AttendanceRecord>().Property(record=>record.EventType).HasConversion<string>();
+        modelBuilder.Entity<AttendanceRecord>().Property(record=>record.Status).HasConversion<string>();
     }
 }

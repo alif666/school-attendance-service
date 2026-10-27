@@ -52,6 +52,34 @@ namespace SchoolAttendance.Infrastructure.Persistence.Migrations
                     b.ToTable("AcademicSessions");
                 });
 
+            modelBuilder.Entity("SchoolAttendance.Domain.Attendances.AttendanceRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateOnly>("AttendanceDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("EnrollmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrollmentId", "AttendanceDate", "EventType")
+                        .IsUnique();
+
+                    b.ToTable("AttendanceRecords");
+                });
+
             modelBuilder.Entity("SchoolAttendance.Domain.Enrollments.Enrollment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -223,6 +251,15 @@ namespace SchoolAttendance.Infrastructure.Persistence.Migrations
                     b.HasOne("SchoolAttendance.Domain.Schools.Branch", null)
                         .WithMany()
                         .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolAttendance.Domain.Attendances.AttendanceRecord", b =>
+                {
+                    b.HasOne("SchoolAttendance.Domain.Enrollments.Enrollment", null)
+                        .WithMany()
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
